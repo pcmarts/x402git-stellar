@@ -6,6 +6,8 @@
  * argument, never printed. Everything else is a flag with an environment fallback.
  */
 
+import { realpathSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 import { dollars } from "./amounts.js";
 import { KNOWN_ASSETS } from "./assets.js";
@@ -160,9 +162,18 @@ export async function main(argv: string[], env: Env, out: (line: string) => void
   }
 }
 
+// Run `main` only when this file is the program, not when a test imports it. The entry
+// is compared by real path: through `npm link` or a global install, `process.argv[1]` is
+// the `bin` symlink (`/opt/homebrew/bin/x402git-stellar`), not `dist/cli.js`, and a name
+// check alone made every command exit 0 in silence.
 const invokedDirectly = (() => {
   const entry = process.argv[1];
-  return typeof entry === "string" && /cli\.(js|ts|mjs)$/.test(entry);
+  if (typeof entry !== "string") return false;
+  try {
+    return realpathSync(entry) === realpathSync(fileURLToPath(import.meta.url));
+  } catch {
+    return /cli\.(js|ts|mjs)$/.test(entry);
+  }
 })();
 
 if (invokedDirectly) {
