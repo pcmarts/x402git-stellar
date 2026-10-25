@@ -1,0 +1,33 @@
+{
+  "name": "x402git-stellar",
+  "version": "0.1.0",
+  "description": "Buy and re-download X402 Git listings from a Stellar account. The stock @x402/stellar client as a command line: buy, fetch, whoami.",
+  "license": "MIT",
+  "type": "module",
+  "repository": { "type": "git", "url": "https://github.com/pcmarts/x402git-stellar.git" },
+  "homepage": "https://x402git.com",
+  "keywords": ["x402", "stellar", "usdt0", "x402git", "agent", "payments"],
+  "bin": { "x402git-stellar": "./dist/cli.js" },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": { ".": { "types": "./dist/index.d.ts", "import": "./dist/index.js" } },
+  "files": ["dist", "README.md", "LICENSE"],
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "prepack": "npm run build"
+  },
+  "dependencies": {
+    "@stellar/stellar-sdk": "16.4.1",
+    "@x402/core": "2.25.0",
+    "@x402/stellar": "2.25.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9",
+    "vitest": "^4.1.11"
+  }
+}
